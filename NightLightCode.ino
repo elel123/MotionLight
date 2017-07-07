@@ -1,4 +1,3 @@
-//VARS
 //the time we give the sensor to calibrate (10-60 secs according to the datasheet)
 int calibrationTime = 30;        
 
@@ -34,8 +33,7 @@ void setup(){
 
 void loop(){
 
-     if(digitalRead(pirPin) == HIGH){
-       //digitalWrite(ledPin, HIGH);   //the led visualizes the sensors output pin state
+     if(digitalRead(pirPin) == HIGH){      
        if(!triggered){
          for(brightness = 0; brightness <= 255; brightness++){
           analogWrite(ledPin, brightness);
@@ -62,7 +60,7 @@ void loop(){
           delay(80);
           if(brightness == 0){triggered = false;}
          }
-       } //the led visualizes the sensors output pin state
+       }
 
        if(takeLowTime){
         lowIn = millis();          //save the time of the transition from high to LOW
