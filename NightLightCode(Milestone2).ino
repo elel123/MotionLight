@@ -17,8 +17,7 @@ int calibrationTime = 15;
 unsigned int secsAtHigh = 15;
 long unsigned int pause = secsAtHigh * 1000;
 
-boolean lockLowPrint = true;
-int timeSinceOn;
+bool lockLowPrint = true;
 int pirPin = 3;    //the digital pin connected to the PIR sensor's output
 int ledPin = 9;
 int brightness = 0;
@@ -53,11 +52,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  if(triggered == false && digitalRead(pirPin) == LOW){
-    sig.setPixelColor(1, 255, 0, 0);
-  }
-
-  if (digitalRead(pirPin) == HIGH) {
+  if (digitalRead(pirPin) == HIGH) { //if the sensor detects motion
     if (triggered == false) {
       Serial.println("---");
       Serial.print("motion detected at ");
@@ -65,8 +60,8 @@ void loop() {
       Serial.println(" sec");
       sig.setPixelColor(1, 0, 255, 0);
       sig.show();
-      fadeIn(127, 127, 127, 20);
-      white(20);
+      fadeIn(127, 127, 127, 20); //fade in white
+      white(20); 
       triggered = true;
     }
     if (lockLowPrint) {
@@ -75,13 +70,11 @@ void loop() {
   }
   ////////////////////////////////////////end of HIGH///////////////////////////////////////////
 
-  if (digitalRead(pirPin) == LOW) {
-    //if the sensor is low for more than the given pause,
-    //we assume that no more motion is going to happen
+  if (digitalRead(pirPin) == LOW) { //if sensor returns to low
+    
     if (triggered == true) {
+      
       if (lockLowPrint == false) {
-        //makes sure this block of code is only executed again after
-        //a new motion sequence has been detected
         Serial.print("motion ended at ");      //output
         Serial.print((millis()) / 1000);
         Serial.println(" sec");
@@ -94,7 +87,7 @@ void loop() {
         delay(1000);
         if(i == (secsAtHigh - 1)){
           Serial.println();
-          for (int j = 0; j <= secsAtHigh; j++) {
+          for (int j = 0; j <= secsAtHigh; j++) { //responsible for the blinking of the indicator light
             Serial.print(j);
             if (j % 2 == 0) {
               sig.setPixelColor(0, 255, 0, 0);
@@ -103,7 +96,7 @@ void loop() {
               sig.setPixelColor(0, 0, 0, 0);
             }
             sig.show();
-            delay(250);
+            delay(250); //for loop (j) runs 4x faster than the loop (i)
           }
           sig.setPixelColor(0, 0, 0, 0);
           sig.show();
